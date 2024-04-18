@@ -69,7 +69,6 @@ def main(config, args):
                       lr_scheduler=None)
 
     if args.eval_only:
-        print("here")
         trainer.val(args.eval_output)
     else:
         trainer.train()
@@ -98,5 +97,4 @@ if __name__ == '__main__':
     ]
     config = ConfigParser.from_args(args, options)
     args = args.parse_args()
-    print(args.eval_only)
     main(config, args)

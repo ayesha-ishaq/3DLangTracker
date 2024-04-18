@@ -399,7 +399,7 @@ class Trainer(BaseTrainer):
             with open(json_output, "w") as f:
                 json.dump(nusc_annos, f)
             
-            metrics_summary = eval_nusc_tracking(json_output, 'test', val_outputs, self.nusc_path,
+            metrics_summary = eval_nusc_tracking(json_output, 'val', val_outputs, self.nusc_path,
                                                  verbose=True,
                                                  num_vis=self.config['trainer']['num_vis'])
 

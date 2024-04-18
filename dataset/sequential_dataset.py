@@ -34,9 +34,10 @@ class Sequence(Dataset):
         det_box = detections['box']
         det_velo = detections['velocity']
         det_category = detections['class']
+        det_text = detections['text']
         det_class_one_hot = torch_one_hot(det_category, self.num_classes)
         det_score = torch.unsqueeze(detections['score'], 1)
-        det_feat = torch.cat([det_box, det_velo, det_class_one_hot, det_score], 1)
+        det_feat = torch.cat([det_box, det_velo, det_class_one_hot, det_score, det_text], 1)
 
         # Build the adjacency matrix of the detection graph
         det_adj = graph_util.bev_euclidean_distance_adj(det_box, det_category, self.graph_truncation_dist)
@@ -50,6 +51,7 @@ class Sequence(Dataset):
                           det_velo=det_velo,
                           det_class=det_category,
                           det_score=det_score,
+                          det_text=det_text,
                           next_exist=det_next_exist,
                           velo_target=velo_target,
                           )

@@ -23,8 +23,8 @@ class STTransformerModel(BaseModel):
         self.num_classes = num_classes
         self.edge_attr_cross_attn = True
         self.cross_attn_value_gate = cross_attn_value_gate
-
-        self.embedding = nn.Linear(17, self.d_model)
+        #529
+        self.embedding = nn.Linear(529, self.d_model)
         self.embedding_edge = nn.Linear(10, self.d_model)
 
         spatial_encoder_layer = TransformerEncoderLayer(self.d_model, self.nhead, self.dropout_p,

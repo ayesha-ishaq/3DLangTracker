@@ -14,6 +14,7 @@ import glob
 import pickle
 from tqdm import tqdm
 from abc import abstractmethod
+import numpy as np
 
 from scipy.optimize import linear_sum_assignment
 
@@ -95,6 +96,11 @@ class BaseDataset(Dataset):
         data['dets']['velocity'] = torch.from_numpy(data['dets']['velocity'])
         data['dets']['class'] = torch.from_numpy(data['dets']['class'])
         data['dets']['score'] = torch.from_numpy(data['dets']['score'])
+        # data['dets']['text'] = data['dets']['text'].reshape(data['dets']['text'].shape[0], -1)
+        if 'text' not in data['dets'].keys():
+            data['dets']['text'] = torch.from_numpy(np.zeros((len(data['dets']['translation']), 512)).astype(np.float32))
+        else:
+            data['dets']['text'] = torch.from_numpy(data['dets']['text'])
 
         data['gts']['translation'] = torch.from_numpy(data['gts']['translation'])
         data['gts']['size'] = torch.from_numpy(data['gts']['size'])
