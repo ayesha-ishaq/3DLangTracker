@@ -1,21 +1,9 @@
-# [ICCV2023] 3DMOTFormer: Graph Transformer for Online 3D Multi-Object Tracking
-
-This is the official implementation of the ICCV2023 paper
-> **3DMOTFormer: Graph Transformer for Online 3D Multi-Object Tracking**  
-> Shuxiao Ding, Eike Rehder, Lukas Schneider, Marius Cordts, Juergen Gall
-
-A demo of scene c525507ee2ef4c6d8bb64b0e0cf0dd32:
-<img src="./img/demo.gif">
-
-## Abstract
-Tracking 3D objects accurately and consistently is crucial for autonomous vehicles, enabling more reliable downstream tasks such as trajectory prediction and motion planning. Based on the substantial progress in object detection in recent years, the tracking-by-detection paradigm has become a popular choice due to its simplicity and efficiency. State-of-the-art 3D multi-object tracking (MOT) works typically rely on non-learned model-based algorithms such as Kalman Filter but require many manually tuned parameters. On the other hand, learning-based approaches face the problem of adapting the training to the online setting, leading to inevitable distribution mismatch between training and inference as well as suboptimal performance. In this work, we propose 3DMOTFormer, a learned geometry-based 3D MOT framework building upon the transformer architecture. We use an Edge-Augmented Graph Transformer to reason on the track-detection bipartite graph frame-by-frame and conduct data association via edge classification. To reduce the distribution mismatch between training and inference, we propose a novel online training strategy with autoregressive and recurrent forward pass as well as sequential batch optimization. Using CenterPoint detections, our approach achieves state-of-the-art 71.2% and 68.2% AMOTA on nuScenes validation and test split. In addition, a trained 3DMOTFormer model generalizes well across different object detectors.
-
-<p align="center"> <img src="./img/3dmotformer.png" width="600"> </p>
+### Acknowledgement [[ICCV2023] 3DMOTFormer: Graph Transformer for Online 3D Multi-Object Tracking](https://github.com/dsx0511/3DMOTFormer.git)
 
 ## Installation
 First, clone this repository and the git submodules:
 ```
-git clone --recurse-submodules https://github.com/dsx0511/3DMOTFormer.git
+git clone --recurse-submodules https://github.com/ayesha-ishaq/3DLangTracker.git
 ```
 
 ### Conda environment
@@ -25,6 +13,7 @@ conda create -n 3dmotformer python==3.7.13
 conda activate 3dmotformer
 conda install pytorch==1.13.1 torchvision==0.14.1 torchaudio==0.13.1 pytorch-cuda=11.7 -c pytorch -c nvidia
 pip install nuscenes-devkit matplotlib pandas motmetrics==1.1.3
+pip install transformers accelerate
 ```
 
 Install pytorch geometric and dependencies:
@@ -52,7 +41,7 @@ pip install -e .
 ## Data preparation
 
 ### 1. Download nuScenes
-Please download nuScenes [here](https://www.nuscenes.org/download). Only the metadata for trainval and test set of v1.0 are necessary. Place nuScenes in your `$NUSCENES_DIR`.
+Please download nuScenes [here](https://www.nuscenes.org/download). Place nuScenes in your `$NUSCENES_DIR`.
 
 ### 2. Get detection results from an existing 3D detector
 3DMOTFormer is compatible with any 3D detectors. 
@@ -77,9 +66,9 @@ If you consider using detections from another 3D detector. Please follow the ins
 
 ### 3. Data pre-processing
 Please rename the json files with detection results for train, validation and test set as `train.json`, `val.json` and `test.json` and place them in the same folder (`$DETECTION_DIR`).
-Use this [script](./generate_data.py) to pre-process the detections:
+Use this [script](./generate_data_lang.py) to pre-process the detections and generate language features:
 ```
-python generate_data.py --dataset_dir=$NUSCENES_DIR --detection_dir=$DETECTION_DIR --output_dir=$PKL_DATA_DIR --apply_nms
+python generate_data_lang.py --dataset_dir=$NUSCENES_DIR --detection_dir=$DETECTION_DIR --output_dir=$PKL_DATA_DIR --apply_nms
 ```
 This converts the json format into pkl files for all key frames and store them in the `$PKL_DATA_DIR`, which will be loaded by the dataloader during training and evaluation.
 
@@ -89,17 +78,14 @@ To start the training, run
 ```
 python train.py -c config/default.json
 ```
-This will also run the evaluation on the valiation split after every epoch.
-
-## Experimental results
-Results using different detectors as input:
-
-| Detector | NDS | mAP | AMOTA | AMOTP | MOTA | IDS | FRAG |
-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| CenterPoint | 68.5 | 61.5 | 0.712 | 0.496 | 0.556 | 438 | 529 |
-| BEVFusion | 72.9 | 70.2 | 0.725 | 0.539 | 0.609 | 593 | 499 |
-| MEGVII | 62.8	| 51.9 | 0.641 | 0.639 | 0.535 | 328 | 497 |
 
 
-## License
-See [LICENSE](./LICENSE) for more details.
+## Checkpoints
+Checkpoints on various language cues:
+
+| Annotation | Weights |
+|:-:|:-:|
+| Instance | [link](https://mbzuaiac-my.sharepoint.com/:u:/g/personal/ayesha_ishaq_mbzuai_ac_ae/ETR0ODAL20FBuSaJCIc-tVkBz6rMXAPA2h1nJ48uueBmsA?e=tJe0tx) |
+| Scene | [link](https://mbzuaiac-my.sharepoint.com/:u:/g/personal/ayesha_ishaq_mbzuai_ac_ae/ETSuCosOO8xDrHGWnkPoEOQBu1XfcuumsbOdsJluhPVj1A?e=rKHAbQ) |
+| Both | [link](https://mbzuaiac-my.sharepoint.com/:u:/g/personal/ayesha_ishaq_mbzuai_ac_ae/EUFjEZoUtkRCuXXtnNO3_pQBVGhNg163tcHsjQeCxx4XBw?e=xjPASr)	|
+
