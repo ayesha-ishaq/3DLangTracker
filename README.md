@@ -78,7 +78,10 @@ To start the training, run
 ```
 python train.py -c config/default.json
 ```
-
+To start the evaluation, run 
+```
+python train.py -c config/default.json -r `$CHECKPOINT WEIGHTS` -o `$RESULTS_DIR` --eval_only 
+```
 
 ## Checkpoints
 Checkpoints on various language cues:
